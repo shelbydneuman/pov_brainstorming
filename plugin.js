@@ -6,7 +6,12 @@ import {
   App as DevtoolsApp,
 } from '@vue/devtools-api'
 
-
+// Underhood, it utilizes the postinstall npm hook. After all packages get installed, the script checks the installed Vue version and redirect the exports to based on the local Vue version. When working with Vue 2, it will also install @vue/composition-api automatically if it doesn’t get installed.
+// ComponentPublicInstance: https://vuejs.org/api/component-instance.html
+// markRaw: marks an object so that it will never be converted to a proxy. Returns the object itself.
+// toRaw: returns  original object from proxies created by reactive(), readonly(), shallowReactive() or shallowReadonly(). Escape hatch used to temporarily read without incurring proxy access / tracking overhead or write without triggering changes. It is not recommended to hold a persistent reference to the original object.
+// unref: Returns the inner value if the argument is a ref, otherwise return the argument itself. This is a sugar function for val = isRef(val) ? val.value : val
+// watch: use the watch option to trigger a function whenever a reactive property changes
 import { ComponentPublicInstance, markRaw, toRaw, unref, watch } from 'vue-demi'
 
 // what VUEX imported: 
@@ -78,7 +83,7 @@ export function registerPiniaDevtools(app: DevtoolsApp, pinia: Pinia) {
       packageName: 'point of vue,
       homepage: 'https://pinia.vuejs.org',
           componentStateTypes,
-    //   Every plugin is bound to a Vue application. You need to pass the user application to setupDevtoolsPlugin - the same that your plugin install method gets as the first argument.
+    //   Every plugin is bound to a Vue application. You need to pass the user app to setupDevtoolsPlugin 
       app,
       },
     //   The second argument of setupDevtoolsPlugin is a callback which will get the Vue Devtools API as the first argument:
